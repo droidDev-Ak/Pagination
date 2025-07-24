@@ -12,3 +12,13 @@
     @apply bg-indigo-100;
   }
 }
+
+.custom-checkbox input:checked + .p-checkbox-box {
+  @apply border-indigo-600 bg-indigo-600 ;
+}
+
+
+.custom-checkbox .p-checkbox-box {
+
+background-color: rgba(146, 112, 232, 0.163);
+}

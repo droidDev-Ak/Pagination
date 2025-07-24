@@ -105,8 +105,9 @@ export default function CheckboxRowSelectionDemo() {
 
                 
             >
-                {!rowClick && (
+                
                     <Column selectionMode="multiple" headerStyle={{ width: '4rem' }}
+                     className="custom-checkbox"
                      header={
 
                         <div className='absolute top-5 border-0 outline-0 left-7 size-2 md:left-9'>
@@ -138,7 +139,7 @@ export default function CheckboxRowSelectionDemo() {
                     } 
 
                     ></Column>
-                )}
+                
                 <Column className='p-3' field="title" header='Title'>
                     // How to add a title heading as well as a button to select the no of rows to be selected in the datable
 
