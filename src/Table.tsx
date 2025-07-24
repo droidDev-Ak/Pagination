@@ -106,18 +106,12 @@ export default function CheckboxRowSelectionDemo() {
                 
             >
                 {!rowClick && (
-                    <Column selectionMode="multiple" headerStyle={{ width: '4rem' }}></Column>
-                )}
-                <Column className='p-3' field="title"
-                    // How to add a title heading as well as a button to select the no of rows to be selected in the datable
+                    <Column selectionMode="multiple" headerStyle={{ width: '4rem' }}
+                     header={
 
-
-
-                    header={
-
-                        <div className='flex items-center justify-between gap-2 w-full '>
-                            <span className='font-semibold text-gray-800'>Title</span>
-                            <Button className="p-button-sm" type="button" icon="pi pi-chevron-down" onClick={(e) => op.current?.toggle(e)} />
+                        <div className='absolute top-5 border-0 outline-0 left-7 size-2 md:left-9'>
+                        
+                            <Button className="p-button-sm focus:outline-none focus:ring-0  size-7" type="button" icon="pi pi-chevron-down" onClick={(e) => op.current?.toggle(e)} />
                             <OverlayPanel ref={op}>
                                 <div className='flex flex-col p-4'>
 
@@ -141,7 +135,16 @@ export default function CheckboxRowSelectionDemo() {
                                 </div>
                             </OverlayPanel>
                         </div>
-                    } >
+                    } 
+
+                    ></Column>
+                )}
+                <Column className='p-3' field="title" header='Title'>
+                    // How to add a title heading as well as a button to select the no of rows to be selected in the datable
+
+
+
+                   
 
                 </Column>
                 <Column className='p-3' field="place_of_origin" header="Place of Origin" />

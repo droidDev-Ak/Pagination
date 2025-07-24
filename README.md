@@ -1,69 +1,83 @@
-# React + TypeScript + Vite
+# 🧩 PrimeReact DataTable Task Submission
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## ✅ Features Implemented
 
-Currently, two official plugins are available:
+This project fulfills all the required conditions mentioned in the assignment:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+### 1️⃣ **No Global Storage of All Rows**
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- ❌ Does **NOT** store all rows across pages in any array or state.
+- ✅ Each page hit fetches fresh data directly from the API.
+- ✅ Avoids memory overload by not caching all rows.
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+### 2️⃣ **API Call on Every Page Visit**
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- 🔁 The API is called **every time** a user navigates to a page, even if the same page was visited before.
+- ✅ Ensures **fresh data fetch** and avoids relying on local state or memory.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### 3️⃣ **Row Selection/Deselection Persistence**
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- ✅ Row selection/deselection persists **across page navigation**.
+- ✅ If a user selects/unselects rows on page 2, moves to page 3, and comes back — the changes are still there.
+- 💾 The persistence is done using an internal state (`selectedProducts`) **without storing entire row data**, just by tracking selected IDs.
+
+---
+
+## 🔧 Tech Stack
+
+- ⚛️ React
+- 🌿 PrimeReact (`DataTable`, `Paginator`, `InputSwitch`, `Button`)
+- 🌀 TypeScript
+- 🎨 Tailwind CSS
+
+---
+
+## 📂 Folder Structure
+```yaml
+.
+├── public/
+├── src/
+│   ├── assets/
+│   ├── Api.js             # JS version of API
+│   ├── Api.ts             # TS version of API fetch logic
+│   ├── App.tsx            # Main application layout
+│   ├── index.css          # Tailwind + custom styles
+│   ├── main.tsx           # Entry point
+│   ├── Table.tsx          # Final working table component (with pagination + persist)
+│   ├── Table.sample.tsx   # Older sample version
+│   ├── Table.sample2.tsx  # Another version for testing
+│   └── vite-env.d.ts
+├── index.html
+├── vite.config.ts
+├── package.json
+├── tsconfig.json
+├── tsconfig.app.json
+├── tsconfig.node.json
+├── eslint.config.js
+└── README.md         
+
+---
+
+## 📸 Screenshots (Optional)
+
+_Add screenshots if required showing:_
+- Selection persistence across pages
+- API calls on each page visit (can be shown via console or network tab)
+
+---
+
+## 👨‍💻 Developer Info
+
+> 🧑‍💻 **Submitted by:** Akash Kumar  
+> 📧 Email: official.akash203@gmail.com
+> 🔗 GitHub: https://github.com/droidDev-Ak  
+> 🌐 Portfolio: https://portfolio-new-one-orpin.vercel.app
+
+---
+
