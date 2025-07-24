@@ -7,9 +7,14 @@ import { dataFetch } from './Api.ts';
 import { Button } from 'primereact/button';
 import { OverlayPanel } from 'primereact/overlaypanel';
 import 'primeicons/primeicons.css';
+import 'primereact/resources/themes/lara-light-indigo/theme.css';
+import 'primereact/resources/primereact.min.css';
+import './index.css';
+
+
 // The input switch UI is not working properly ...In my guess there is issue from PrimeReact Prime react...I can create a custom switch UI but since in the task it is told to use PrimeReact components that's why I am using the InputSwitch component from PrimeReact.∏
 type T = {
-    id: number, // Make sure you have an id field for proper selection
+
     title: string,
     place_of_origin: string,
     artist_display: string,
@@ -21,7 +26,7 @@ type T = {
 export default function CheckboxRowSelectionDemo() {
     const [products, setProducts] = useState<T[]>([]);
     const [selectedProducts, setSelectedProducts] = useState<T[] | null>(null);
-    const [rowClick, setRowClick] = useState<boolean>(true); 
+    const [rowClick, setRowClick] = useState<boolean>(true);
     const [page, setPage] = useState<number>(0);
     const [totalRecords, setTotalRecords] = useState<number>(0);
     const [rowSelect, setRowSelect] = useState<number>(0);
@@ -62,10 +67,10 @@ export default function CheckboxRowSelectionDemo() {
         if (rowClick) {
             setSelectedProducts(prev => {
                 const selected = prev || [];
-                const isSelected = selected.some(item => item.id === event.data.id);
-                
+                const isSelected = selected.some(item => item.title === event.data.title);
+
                 if (isSelected) {
-                    return selected.filter(item => item.id !== event.data.id);
+                    return selected.filter(item => item.title !== event.data.title);
                 } else {
                     return [...selected, event.data];
                 }
@@ -75,64 +80,79 @@ export default function CheckboxRowSelectionDemo() {
 
     return (
         <div className="card p-4">
-            <div className='absolute z-999 top-[10vh] left-[3vw]'>
-                <Button className="p-button-sm" type="button" icon="pi pi-chevron-down" onClick={(e) => op.current?.toggle(e)} />
-                <OverlayPanel ref={op}>
-                    <div className='flex flex-col p-4'>
-                        <input
-                            type="number"
-                            placeholder='Enter Rows to select'
-                            className='p-2 border-1 border-gray-300 rounded-md mb-2'
-                            value={rowSelect}
-                            onChange={(e) => {
-                                e.preventDefault();
-                                setRowSelect(Number(e.target.value));
-                            }}
-                        />
-                        <button
-                            className='p-2 bg-indigo-400 w-fit mx-auto outline-0 border-0 p-button rounded-md'
-                            onClick={handleSubmit}
-                        >
-                            Submit
-                        </button>
-                    </div>
-                </OverlayPanel>
+
+
+
+            <div className=" flex justify-center items-center mb-4 gap-2">
+                <InputSwitch
+                    inputId="input-rowclick"
+                    checked={rowClick}
+                    onChange={(e: InputSwitchChangeEvent) => setRowClick(e.value!)}
+                />
+                <label htmlFor="input-rowclick" className="cursor-pointer">
+                    Row Click
+                </label>
             </div>
-
-
-<div className=" flex justify-center items-center mb-4 gap-2">
-    <InputSwitch
-        inputId="input-rowclick"
-        checked={rowClick}
-        onChange={(e: InputSwitchChangeEvent) => setRowClick(e.value!)}
-    />
-    <label htmlFor="input-rowclick" className="cursor-pointer">
-        Row Click
-    </label>
-</div>
 
 
             <DataTable
                 className='rounded-md border-1 border-black shadow-xl shadow-black p-1'
                 paginator
+
                 rows={12}
                 lazy
                 totalRecords={totalRecords}
                 first={page * 12}
-                onPage={(e) => setPage(e.page)}
-                rowsPerPageOptions={[1, 2, 3, 4]}
+                onPage={(e:any) => setPage(e.page)}
+
+
                 value={products}
                 selectionMode={rowClick ? 'multiple' : 'checkbox'}
                 selection={selectedProducts || []}
-                onSelectionChange={(e) => setSelectedProducts(e.value)}
-                dataKey="id"
+                onSelectionChange={(e: any) => setSelectedProducts(e.value)}
+                dataKey="title" // I am assuming that APi titles are unique
                 tableStyle={{ minWidth: '50rem' }}
                 onRowClick={rowClick ? onRowSelect : undefined}
             >
                 {!rowClick && (
                     <Column selectionMode="multiple" headerStyle={{ width: '4rem' }}></Column>
                 )}
-                <Column className='p-3' field="title" header="Title" />
+                <Column className='p-3' field="title"
+                    // How to add a title heading as well as a button to select the no of rows to be selected in the datable
+
+
+
+                    header={
+
+                        <div className='flex items-center justify-between gap-2 w-full '>
+                            <span className='font-semibold text-gray-800'>Title</span>
+                            <Button className="p-button-sm" type="button" icon="pi pi-chevron-down" onClick={(e) => op.current?.toggle(e)} />
+                            <OverlayPanel ref={op}>
+                                <div className='flex flex-col p-4'>
+
+                                    <input
+                                        type="number"
+                                        placeholder='Enter Rows to select'
+                                        className='p-2 border-1 border-gray-300 rounded-md mb-2'
+                                        value={rowSelect}
+                                        onChange={(e) => {
+                                            e.preventDefault();
+                                            setRowSelect(Number(e.target.value));
+                                        }}
+                                    />
+
+                                    <button
+                                        className='p-2 bg-indigo-400 w-fit mx-auto outline-0 border-0 p-button rounded-md'
+                                        onClick={handleSubmit}
+                                    >
+                                        Submit
+                                    </button>
+                                </div>
+                            </OverlayPanel>
+                        </div>
+                    } >
+
+                </Column>
                 <Column className='p-3' field="place_of_origin" header="Place of Origin" />
                 <Column className='p-3' field="artist_display" header="Artist Display" />
                 <Column className='p-3' field="inscriptions" header="Inscriptions" />

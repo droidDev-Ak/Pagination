@@ -7,6 +7,7 @@ type T = {
   date_end:number,
 };
 
+
 async function dataFetch(page: number): Promise<{ data: T[]; total: number }> {
     try {
         console.log("Started");

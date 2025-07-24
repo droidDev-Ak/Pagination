@@ -1,1 +1,14 @@
 @import "tailwindcss";
+
+
+@layer components {
+  /* Active page highlight */
+  .p-paginator .p-paginator-page.p-highlight {
+    @apply bg-indigo-500 text-white rounded-md;
+  }
+
+  /* Optional hover effect */
+  .p-paginator .p-paginator-page:hover {
+    @apply bg-indigo-100;
+  }
+}
