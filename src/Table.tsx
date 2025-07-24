@@ -14,7 +14,7 @@ import './index.css';
 
 // The input switch UI is not working properly ...In my guess there is issue from PrimeReact Prime react...I can create a custom switch UI but since in the task it is told to use PrimeReact components that's why I am using the InputSwitch component from PrimeReact.∏
 type T = {
-
+    id:number,
     title: string,
     place_of_origin: string,
     artist_display: string,
@@ -22,6 +22,7 @@ type T = {
     date_start: number,
     date_end: number,
 };
+
 
 export default function CheckboxRowSelectionDemo() {
     const [products, setProducts] = useState<T[]>([]);
@@ -37,6 +38,7 @@ export default function CheckboxRowSelectionDemo() {
         dataFetch(page + 1).then(({ data, total }) => {
             setProducts(data);
             setTotalRecords(total);
+
         });
     }, [page]);
 
@@ -44,8 +46,10 @@ export default function CheckboxRowSelectionDemo() {
         if (rowSelect > 0) {
             const totalPages = Math.ceil(rowSelect / 12);
             let allSelected: T[] = [];
-
+            // console.log(totalPages);
+            
             const fetchPages = async () => {
+
                 for (let i = 1; i <= totalPages; i++) {
                     const { data: pageData } = await dataFetch(i);
                     const startIndex = 0;
@@ -63,24 +67,10 @@ export default function CheckboxRowSelectionDemo() {
         }
     };
 
-    const onRowSelect = (event: { data: T }) => {
-        if (rowClick) {
-            setSelectedProducts(prev => {
-                const selected = prev || [];
-                const isSelected = selected.some(item => item.title === event.data.title);
-
-                if (isSelected) {
-                    return selected.filter(item => item.title !== event.data.title);
-                } else {
-                    return [...selected, event.data];
-                }
-            });
-        }
-    };
+    
 
     return (
         <div className="card p-4">
-
 
 
             <div className=" flex justify-center items-center mb-4 gap-2">
@@ -110,9 +100,10 @@ export default function CheckboxRowSelectionDemo() {
                 selectionMode={rowClick ? 'multiple' : 'checkbox'}
                 selection={selectedProducts || []}
                 onSelectionChange={(e: any) => setSelectedProducts(e.value)}
-                dataKey="title" // I am assuming that APi titles are unique
-                tableStyle={{ minWidth: '50rem' }}
-                onRowClick={rowClick ? onRowSelect : undefined}
+                dataKey="id" // I am assuming that APi titles are unique
+                tableStyle={{ maxWidth: '95rem' }}
+
+                
             >
                 {!rowClick && (
                     <Column selectionMode="multiple" headerStyle={{ width: '4rem' }}></Column>
