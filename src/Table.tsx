@@ -7,8 +7,9 @@ import { dataFetch } from './Api.ts';
 import { Button } from 'primereact/button';
 import { OverlayPanel } from 'primereact/overlaypanel';
 import 'primeicons/primeicons.css';
-
+// The input switch UI is not working properly ...In my guess there is issue from PrimeReact Prime react...I can create a custom switch UI but since in the task it is told to use PrimeReact components that's why I am using the InputSwitch component from PrimeReact.∏
 type T = {
+    id: number, // Make sure you have an id field for proper selection
     title: string,
     place_of_origin: string,
     artist_display: string,
@@ -20,20 +21,19 @@ type T = {
 export default function CheckboxRowSelectionDemo() {
     const [products, setProducts] = useState<T[]>([]);
     const [selectedProducts, setSelectedProducts] = useState<T[] | null>(null);
-    const [rowClick, setRowClick] = useState<boolean>(false);
+    const [rowClick, setRowClick] = useState<boolean>(true); 
     const [page, setPage] = useState<number>(0);
     const [totalRecords, setTotalRecords] = useState<number>(0);
     const [rowSelect, setRowSelect] = useState<number>(0);
-    const op = useRef(null);
+    const op = useRef<OverlayPanel>(null);
 
-    // Page-wise data fetching
+
     useEffect(() => {
         dataFetch(page + 1).then(({ data, total }) => {
             setProducts(data);
             setTotalRecords(total);
         });
     }, [page]);
-
 
     const handleSubmit = () => {
         if (rowSelect > 0) {
@@ -58,11 +58,25 @@ export default function CheckboxRowSelectionDemo() {
         }
     };
 
+    const onRowSelect = (event: { data: T }) => {
+        if (rowClick) {
+            setSelectedProducts(prev => {
+                const selected = prev || [];
+                const isSelected = selected.some(item => item.id === event.data.id);
+                
+                if (isSelected) {
+                    return selected.filter(item => item.id !== event.data.id);
+                } else {
+                    return [...selected, event.data];
+                }
+            });
+        }
+    };
+
     return (
         <div className="card p-4">
-
             <div className='absolute z-999 top-[10vh] left-[3vw]'>
-                <Button className="p-button-sm" type="button" icon="pi pi-chevron-down" onClick={(e) => op.current.toggle(e)} />
+                <Button className="p-button-sm" type="button" icon="pi pi-chevron-down" onClick={(e) => op.current?.toggle(e)} />
                 <OverlayPanel ref={op}>
                     <div className='flex flex-col p-4'>
                         <input
@@ -86,18 +100,20 @@ export default function CheckboxRowSelectionDemo() {
             </div>
 
 
-            <div className="flex justify-content-center align-items-center mb-4 gap-2">
-                <InputSwitch
-                    inputId="input-rowclick"
-                    checked={rowClick}
-                    onChange={(e: InputSwitchChangeEvent) => setRowClick(e.value!)}
-                />
-                <label htmlFor="input-rowclick">Row Click</label>
-            </div>
+<div className=" flex justify-center items-center mb-4 gap-2">
+    <InputSwitch
+        inputId="input-rowclick"
+        checked={rowClick}
+        onChange={(e: InputSwitchChangeEvent) => setRowClick(e.value!)}
+    />
+    <label htmlFor="input-rowclick" className="cursor-pointer">
+        Row Click
+    </label>
+</div>
 
 
             <DataTable
-            className='rounded-md border-1 border-black shadow-xl shadow-black p-1'
+                className='rounded-md border-1 border-black shadow-xl shadow-black p-1'
                 paginator
                 rows={12}
                 lazy
@@ -106,14 +122,16 @@ export default function CheckboxRowSelectionDemo() {
                 onPage={(e) => setPage(e.page)}
                 rowsPerPageOptions={[1, 2, 3, 4]}
                 value={products}
-                selectionMode={rowClick ? undefined : 'multiple'}
-                selection={selectedProducts!}
-                onSelectionChange={(e: { value: T[] }) => setSelectedProducts(e.value)}
+                selectionMode={rowClick ? 'multiple' : 'checkbox'}
+                selection={selectedProducts || []}
+                onSelectionChange={(e) => setSelectedProducts(e.value)}
                 dataKey="id"
                 tableStyle={{ minWidth: '50rem' }}
-
+                onRowClick={rowClick ? onRowSelect : undefined}
             >
-                <Column selectionMode={'multiple'} headerStyle={{ width: '4rem' }}></Column>
+                {!rowClick && (
+                    <Column selectionMode="multiple" headerStyle={{ width: '4rem' }}></Column>
+                )}
                 <Column className='p-3' field="title" header="Title" />
                 <Column className='p-3' field="place_of_origin" header="Place of Origin" />
                 <Column className='p-3' field="artist_display" header="Artist Display" />
